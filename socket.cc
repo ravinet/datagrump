@@ -53,7 +53,7 @@ int64_t Socket::connect( const Address & addr ) const
 		                  sizeof( addr.sockaddr() ) );
   if (connect_fd < 0) {
     fprintf( stderr, "Error connecting to %s\n", addr.str().c_str() );
-    perror( "bind" );
+    perror( "connect" );
     exit( 1 );
   }
   return connect_fd;
