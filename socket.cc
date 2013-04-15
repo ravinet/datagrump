@@ -26,6 +26,26 @@ Socket::Socket()
   }
 }
 
+/* Accept connection request */
+int64_t Socket::accept( void ) const
+{
+  int64_t acc = ::accept( sock_, nullptr, nullptr);
+  if ( acc  < 0 ) {
+    perror( "accept" );
+    exit( 1 );
+  }
+  return acc;
+}
+
+/* listen for requests */
+void Socket::listen(int BACKLOG ) const
+{
+  if ( ::listen( sock_, BACKLOG) == -1) {
+    perror( "listen" );
+    exit( 1 );
+  }
+}
+
 /* Connect to ip/port (typically used by client) */
 void Socket::connect( const Address & addr ) const
 {

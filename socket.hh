@@ -14,6 +14,12 @@ namespace Network {
     /* Default constructor */
     Socket();
 
+    /* Accept connection request */
+    int64_t accept( void ) const;
+
+    /* listen for requests */
+    void listen(int BACKLOG ) const;
+
     /* Bind to port (typically used by server) */
     void bind( const Address & addr ) const;
 
