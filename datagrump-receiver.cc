@@ -15,7 +15,7 @@ int main( int argc, char *argv[] )
 
   try {
     /* Create UDP socket for incoming datagrams. */
-    Network::Socket sock;
+    Network::Socket sock( SOCK_DGRAM );
 
     /* Listen on UDP port. */
     sock.bind( Address( "0" /* all IP addresses */,

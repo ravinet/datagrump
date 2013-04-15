@@ -9,8 +9,8 @@ using namespace std;
 using namespace Network;
 
 /* Default constructor */
-Socket::Socket()
-  : sock_( socket( AF_INET, SOCK_DGRAM, 0 ) )
+Socket::Socket( int sock_type )
+  : sock_( socket( AF_INET, sock_type, 0 ) )
 {
   if ( sock_ < 0 ) {
     perror( "socket" );
@@ -47,14 +47,16 @@ void Socket::listen(int BACKLOG ) const
 }
 
 /* Connect to ip/port (typically used by client) */
-void Socket::connect( const Address & addr ) const
+int64_t Socket::connect( const Address & addr ) const
 {
-  if ( ::connect( sock_, (sockaddr *)&addr.sockaddr(),
-		  sizeof( addr.sockaddr() ) ) < 0 ) {
+  int64_t connect_fd = ::connect( sock_, (sockaddr *)&addr.sockaddr(),
+		                  sizeof( addr.sockaddr() ) );
+  if (connect_fd < 0) {
     fprintf( stderr, "Error connecting to %s\n", addr.str().c_str() );
     perror( "bind" );
     exit( 1 );
   }
+  return connect_fd;
 }
 
 /* Bind to port (typically used by server) */

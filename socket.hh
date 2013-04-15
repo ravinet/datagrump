@@ -12,7 +12,7 @@ namespace Network {
 
   public:
     /* Default constructor */
-    Socket();
+    Socket( int sock_type );
 
     /* Accept connection request */
     int64_t accept( void ) const;
@@ -24,7 +24,7 @@ namespace Network {
     void bind( const Address & addr ) const;
 
     /* Connect to ip/port (typically used by client) */
-    void connect( const Address & addr ) const;
+    int64_t connect( const Address & addr ) const;
 
     /* Send packet */
     void send( Packet & packet ) const;

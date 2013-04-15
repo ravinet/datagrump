@@ -30,7 +30,7 @@ int main( int argc, char *argv[] )
 	     destination.ip().c_str(), destination.port() );
 
     /* Create UDP socket for outgoing datagrams. */
-    Network::Socket sock;
+    Network::Socket sock( SOCK_DGRAM );
 
     /* Initialize packet counters */
     uint64_t sequence_number = 0;
