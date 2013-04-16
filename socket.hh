@@ -8,7 +8,11 @@ namespace Network {
 /* Socket class. Wraps socket() */
   class Socket {
   private:
-    int sock_; /* the socket file descriptor */
+    /* the socket file descriptor */
+    int sock_;
+    
+    /* bool that indicates if timestamps are enabled */
+    bool timestamps_enabled;
 
   public:
     /* Default constructor */
@@ -40,6 +44,9 @@ namespace Network {
 
     /* Setter for underlying socket fd */
     void set_fd( int sock ) { sock_ = sock; }
+
+    /* Disable timestamps */
+    void disable_timestamps( void ) { timestamps_enabled = false; }
   };
 }
 

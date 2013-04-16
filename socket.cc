@@ -10,11 +10,13 @@ using namespace Network;
 
 /* Default constructor */
 Socket::Socket()
-  : sock_(-1) {}
+  : sock_(-1),
+    timestamps_enabled( true ) {}
 
 /* Construct socket of specific type */
 Socket::Socket( int sock_type )
-  : sock_( socket( AF_INET, sock_type, 0 ) )
+  : sock_( socket( AF_INET, sock_type, 0 ) ),
+    timestamps_enabled( true )
 {
   if ( sock_ < 0 ) {
     perror( "socket" );
@@ -138,12 +140,20 @@ Packet Socket::recv( void ) const
   }
 
   /* verify presence of timestamp */
-  struct cmsghdr *ts_hdr = CMSG_FIRSTHDR( &header );
-  assert( ts_hdr );
-  assert( ts_hdr->cmsg_level == SOL_SOCKET );
-  assert( ts_hdr->cmsg_type == SO_TIMESTAMPNS );
-
-  return Packet( Address( packet_remote_addr ),
+  if (timestamps_enabled) {
+    struct cmsghdr *ts_hdr = CMSG_FIRSTHDR( &header );
+    assert( ts_hdr );
+    assert( ts_hdr->cmsg_level == SOL_SOCKET );
+    assert( ts_hdr->cmsg_type == SO_TIMESTAMPNS );
+ 
+    return Packet( Address( packet_remote_addr ),
 		 string( msg_payload, received_len ),
-		 *(struct timespec *)CMSG_DATA( ts_hdr ) );
+                 *(struct timespec *)CMSG_DATA( ts_hdr ) );
+  } else {
+    struct timespec ts;
+    return Packet( Address( packet_remote_addr ),
+		 string( msg_payload, received_len ),
+                 ts);
+
+  }
 }
