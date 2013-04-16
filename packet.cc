@@ -75,8 +75,6 @@ string Packet::str( void ) const
     + ack_recv_timestamp_.str()
     + string( payload_len_, 'x' );
 
-  assert( ret.size() <= DATA_PACKET_SIZE );
-
   return ret;
 }
 
