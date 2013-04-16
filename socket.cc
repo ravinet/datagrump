@@ -9,6 +9,10 @@ using namespace std;
 using namespace Network;
 
 /* Default constructor */
+Socket::Socket()
+  : sock_(-1) {}
+
+/* Construct socket of specific type */
 Socket::Socket( int sock_type )
   : sock_( socket( AF_INET, sock_type, 0 ) )
 {
@@ -27,14 +31,16 @@ Socket::Socket( int sock_type )
 }
 
 /* Accept connection request */
-int64_t Socket::accept( void ) const
+Socket Socket::accept( void ) const
 {
   int64_t acc = ::accept( sock_, nullptr, nullptr);
   if ( acc  < 0 ) {
     perror( "accept" );
     exit( 1 );
   }
-  return acc;
+  Socket tmp_socket;
+  tmp_socket.set_fd( acc );
+  return tmp_socket;
 }
 
 /* listen for requests */
@@ -47,7 +53,7 @@ void Socket::listen(int BACKLOG ) const
 }
 
 /* Connect to ip/port (typically used by client) */
-int64_t Socket::connect( const Address & addr ) const
+Socket Socket::connect( const Address & addr ) const
 {
   int64_t connect_fd = ::connect( sock_, (sockaddr *)&addr.sockaddr(),
 		                  sizeof( addr.sockaddr() ) );
@@ -56,7 +62,9 @@ int64_t Socket::connect( const Address & addr ) const
     perror( "connect" );
     exit( 1 );
   }
-  return connect_fd;
+  Socket tmp_socket;
+  tmp_socket.set_fd( connect_fd );
+  return tmp_socket;
 }
 
 /* Bind to port (typically used by server) */

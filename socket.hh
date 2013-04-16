@@ -12,10 +12,13 @@ namespace Network {
 
   public:
     /* Default constructor */
+    Socket();
+    
+    /* Construct socket of specific type */
     Socket( int sock_type );
 
     /* Accept connection request */
-    int64_t accept( void ) const;
+    Socket accept( void ) const;
 
     /* listen for requests */
     void listen(int BACKLOG ) const;
@@ -24,7 +27,7 @@ namespace Network {
     void bind( const Address & addr ) const;
 
     /* Connect to ip/port (typically used by client) */
-    int64_t connect( const Address & addr ) const;
+    Socket connect( const Address & addr ) const;
 
     /* Send packet */
     void send( Packet & packet ) const;
@@ -34,6 +37,9 @@ namespace Network {
 
     /* Getter for underlying socket fd */
     int fd( void ) const { return sock_; }
+
+    /* Setter for underlying socket fd */
+    void set_fd( int sock ) { sock_ = sock; }
   };
 }
 
