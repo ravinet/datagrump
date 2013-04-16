@@ -28,6 +28,7 @@ int main( int argc, char *argv[] )
 
     /* Block until you can accept a connection */
     auto remote_socket = sock.accept();
+    remote_socket.disable_timestamps();
     fprintf( stderr, "Accepted connection successfully from sender \n" );
 
     /* Loop */
